@@ -2,8 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { Mainnet, DAppProvider, Config } from "@usedapp/core";
 import { getDefaultProvider } from "ethers";
+import { Provider } from "react-redux";
+
 import App from "./App";
+import { store } from "./redux/store";
 import reportWebVitals from "./reportWebVitals";
+import "react-toastify/dist/ReactToastify.css";
+
 const config: Config = {
   readOnlyChainId: Mainnet.chainId,
   readOnlyUrls: {
@@ -16,9 +21,11 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <DAppProvider config={config}>
-      <App />
-    </DAppProvider>
+    <Provider store={store}>
+      <DAppProvider config={config}>
+        <App />
+      </DAppProvider>
+    </Provider>
   </React.StrictMode>,
 );
 

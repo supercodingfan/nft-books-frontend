@@ -9,8 +9,15 @@ import {
   Spacer,
 } from "@chakra-ui/react";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { Book } from "../types";
+import { useEthers } from "@usedapp/core";
 
-const BookCard = () => {
+interface Props {
+  book: Book;
+}
+
+const BookCard = ({ book }: Props) => {
+  const { account } = useEthers();
   const { colorMode } = useColorMode();
   return (
     <Box
@@ -19,27 +26,33 @@ const BookCard = () => {
       overflow="hidden"
       bg={colorMode === "dark" ? "gray.700" : "gray.200"}
     >
-      <Image src="/book.jpg" alt="Card Image" w="100%"></Image>
+      <Image
+        src={`${process.env.REACT_APP_SERVER_UPLOADS_URL}${book.image_path}`}
+        alt="Card Image"
+        w="100%"
+      ></Image>
       <Box p={5}>
         <Stack>
           <Text as="h2" align="center" fontWeight="normal" my={2}>
-            A Computer Science Portal for Geeks
+            {book.title}
           </Text>
           <Text as="p" fontWeight="normal" my={2}>
-            A Computer Science Portal for Geeks
+            {book.description}
           </Text>
         </Stack>
-        <Flex>
-          <Spacer />
-          <Button variant="solid" colorScheme="blue" size="sm" mx="1">
-            <EditIcon />
-            &nbsp;Edit
-          </Button>
-          <Button variant="solid" colorScheme="red" size="sm" mx="1">
-            <DeleteIcon />
-            &nbsp;Delete
-          </Button>
-        </Flex>
+        {account === book.owner && (
+          <Flex>
+            <Spacer />
+            <Button variant="solid" colorScheme="blue" size="sm" mx="1">
+              <EditIcon />
+              &nbsp;Edit
+            </Button>
+            <Button variant="solid" colorScheme="red" size="sm" mx="1">
+              <DeleteIcon />
+              &nbsp;Delete
+            </Button>
+          </Flex>
+        )}
       </Box>
     </Box>
   );

@@ -1,8 +1,21 @@
+import { useEffect } from "react";
 import { Grid, GridItem } from "@chakra-ui/react";
+import { useEthers } from "@usedapp/core";
+
+import { useAppSelector, useAppDispatch } from "../redux/hook";
+import { selectBooks, getBookList } from "../redux/modules/book";
 import BookCard from "../components/BookCard";
 import BookCreationCard from "../components/BookCreationCard";
 
 const BookList = () => {
+  const dispatch = useAppDispatch();
+  const books = useAppSelector(selectBooks);
+  const { account } = useEthers();
+
+  useEffect(() => {
+    dispatch(getBookList());
+  }, []);
+
   return (
     <Grid
       templateColumns={[
@@ -14,21 +27,18 @@ const BookList = () => {
       gap={6}
       px={3}
     >
-      <GridItem w="100%">
-        <BookCard />
-      </GridItem>
-      <GridItem w="100%">
-        <BookCard />
-      </GridItem>
-      <GridItem w="100%">
-        <BookCard />
-      </GridItem>
-      <GridItem w="100%">
-        <BookCard />
-      </GridItem>
-      <GridItem w="100%" h="100%">
-        <BookCreationCard />
-      </GridItem>
+      {account && (
+        <GridItem w="100%" h="100%">
+          <BookCreationCard />
+        </GridItem>
+      )}
+      {books.map((book, index) => {
+        return (
+          <GridItem w="100%" key={`books${index}`}>
+            <BookCard book={book} />
+          </GridItem>
+        );
+      })}
     </Grid>
   );
 };

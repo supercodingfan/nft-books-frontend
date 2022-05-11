@@ -1,5 +1,6 @@
 import React from "react";
 import { ChakraProvider } from "@chakra-ui/react";
+import { ToastContainer } from "react-toastify";
 
 import Layout from "./layout/Layout";
 import BookList from "./containers/BookList";
@@ -13,6 +14,7 @@ function App() {
       <Layout>
         <BookList />
       </Layout>
+      <ToastContainer position="top-right" />
     </ChakraProvider>
   );
 }
