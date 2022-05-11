@@ -8,7 +8,7 @@ type Props = {
 
 export default function Layout({ children }: Props) {
   return (
-    <Box h="100vh" bg="gray.800">
+    <Box minH="100vh" bg="gray.800">
       <Header />
       {children}
     </Box>
