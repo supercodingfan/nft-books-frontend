@@ -24,6 +24,17 @@ export const getBookList = createAsyncThunk("book/getList", async () => {
   return response.data;
 });
 
+export const createBook = createAsyncThunk(
+  "book/createBook",
+  async (formData: FormData) => {
+    const response = await api.createBook(formData);
+
+    console.log(response.data);
+
+    return response.data;
+  },
+);
+
 export const { reducer, actions } = createSlice({
   name: "book",
   initialState,
@@ -45,6 +56,16 @@ export const { reducer, actions } = createSlice({
       .addCase(getBookList.rejected, (state, action) => {
         state.loading = false;
         state.books = [];
+      })
+      .addCase(createBook.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(createBook.fulfilled, (state, action) => {
+        state.loading = false;
+        state.books = [...state.books, action.payload.book];
+      })
+      .addCase(createBook.rejected, (state, action) => {
+        state.loading = false;
       });
   },
 });

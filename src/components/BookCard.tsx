@@ -22,6 +22,7 @@ const BookCard = ({ book }: Props) => {
   return (
     <Box
       w="100%"
+      h="100%"
       rounded="20px"
       overflow="hidden"
       bg={colorMode === "dark" ? "gray.700" : "gray.200"}

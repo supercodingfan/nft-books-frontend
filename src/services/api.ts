@@ -21,6 +21,15 @@ axiosInstance.interceptors.response.use(
 
 const api = {
   getBookList: () => axiosInstance.get("/books"),
+  createBook: (formData: FormData) =>
+    axiosInstance({
+      method: "post",
+      url: "/books",
+      data: formData,
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    }),
 };
 
 export default api;

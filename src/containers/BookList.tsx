@@ -1,16 +1,18 @@
 import { useEffect } from "react";
-import { Grid, GridItem } from "@chakra-ui/react";
+import { Grid, GridItem, useDisclosure } from "@chakra-ui/react";
 import { useEthers } from "@usedapp/core";
 
 import { useAppSelector, useAppDispatch } from "../redux/hook";
 import { selectBooks, getBookList } from "../redux/modules/book";
 import BookCard from "../components/BookCard";
 import BookCreationCard from "../components/BookCreationCard";
+import BookCreationModal from "../components/BookCreationModal";
 
 const BookList = () => {
   const dispatch = useAppDispatch();
   const books = useAppSelector(selectBooks);
   const { account } = useEthers();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     dispatch(getBookList());
@@ -29,7 +31,12 @@ const BookList = () => {
     >
       {account && (
         <GridItem w="100%" h="100%">
-          <BookCreationCard />
+          <BookCreationCard onOpen={onOpen} />
+          <BookCreationModal
+            isOpen={isOpen}
+            onClose={onClose}
+            account={account}
+          />
         </GridItem>
       )}
       {books.map((book, index) => {
