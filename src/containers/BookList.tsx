@@ -30,7 +30,7 @@ const BookList = () => {
       px={3}
     >
       {account && (
-        <GridItem w="100%" h="100%">
+        <GridItem w="100%" h="100%" minH="400px">
           <BookCreationCard onOpen={onOpen} />
           <BookCreationModal
             isOpen={isOpen}

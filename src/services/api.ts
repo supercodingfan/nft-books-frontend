@@ -30,6 +30,15 @@ const api = {
         "content-type": "multipart/form-data",
       },
     }),
+  editBook: ({ id, formData }: { id: string; formData: FormData }) =>
+    axiosInstance({
+      method: "put",
+      url: `/books/${id}`,
+      data: formData,
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    }),
 };
 
 export default api;

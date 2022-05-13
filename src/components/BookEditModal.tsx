@@ -13,31 +13,39 @@ import {
   Input,
   Textarea,
 } from "@chakra-ui/react";
+import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useAppDispatch } from "../redux/hook";
-import { createBook } from "../redux/modules/book";
+import { editBook } from "../redux/modules/book";
+import { Book } from "../types";
 
 interface Props {
   isOpen: any;
   onClose: any;
-  account: string;
+  account: string | null | undefined;
+  book: Book;
 }
 
-const BookCreationModal = ({ isOpen, onClose, account }: Props) => {
+const BookEditModal = ({ isOpen, onClose, account, book }: Props) => {
   const dispatch = useAppDispatch();
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm({
+    defaultValues: useMemo(() => {
+      return { title: book.title, description: book.description, image: null };
+    }, [book]),
+  });
 
   const onSubmit = (values: any) => {
     const formData = new FormData();
     formData.append("title", values.title);
     formData.append("description", values.description);
-    formData.append("image", values.image[0]);
-    formData.append("owner", account);
-    return dispatch(createBook(formData)).then(() => {
+    if (values.image || values.image?.length)
+      formData.append("image", values.image[0]);
+    if (account) formData.append("owner", account);
+    return dispatch(editBook({ id: book._id, formData })).then(() => {
       onClose();
     });
   };
@@ -58,7 +66,7 @@ const BookCreationModal = ({ isOpen, onClose, account }: Props) => {
             name="book_form"
             onSubmit={handleSubmit(onSubmit)}
           >
-            <FormControl isInvalid={errors.title}>
+            <FormControl>
               <FormLabel htmlFor="title">Title</FormLabel>
               <Input
                 id="title"
@@ -75,7 +83,7 @@ const BookCreationModal = ({ isOpen, onClose, account }: Props) => {
                 {errors.title && errors.title.message}
               </FormErrorMessage>
             </FormControl>
-            <FormControl isInvalid={errors.description}>
+            <FormControl>
               <FormLabel htmlFor="description">Description</FormLabel>
               <Textarea
                 id="description"
@@ -92,15 +100,9 @@ const BookCreationModal = ({ isOpen, onClose, account }: Props) => {
                 {errors.description && errors.description.message}
               </FormErrorMessage>
             </FormControl>
-            <FormControl isInvalid={errors.description}>
+            <FormControl>
               <FormLabel htmlFor="image">Image</FormLabel>
-              <Input
-                id="image"
-                type="file"
-                {...register("image", {
-                  required: "This is required",
-                })}
-              />
+              <Input id="image" type="file" {...register("image", {})} />
               <FormErrorMessage>
                 {errors.image && errors.image.message}
               </FormErrorMessage>
@@ -125,4 +127,4 @@ const BookCreationModal = ({ isOpen, onClose, account }: Props) => {
   );
 };
 
-export default BookCreationModal;
+export default BookEditModal;
