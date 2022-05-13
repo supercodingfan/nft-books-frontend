@@ -16,12 +16,14 @@ import BookEditModal from "./BookEditModal";
 
 interface Props {
   book: Book;
+  onDelete: any;
 }
 
-const BookCard = ({ book }: Props) => {
+const BookCard = ({ book, onDelete }: Props) => {
   const { account } = useEthers();
   const { colorMode } = useColorMode();
   const { isOpen, onClose, onOpen } = useDisclosure();
+
   return (
     <>
       <Box
@@ -58,7 +60,13 @@ const BookCard = ({ book }: Props) => {
                 <EditIcon />
                 &nbsp;Edit
               </Button>
-              <Button variant="solid" colorScheme="red" size="sm" mx="1">
+              <Button
+                variant="solid"
+                colorScheme="red"
+                size="sm"
+                mx="1"
+                onClick={onDelete}
+              >
                 <DeleteIcon />
                 &nbsp;Delete
               </Button>

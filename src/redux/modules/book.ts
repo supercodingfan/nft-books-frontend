@@ -42,6 +42,15 @@ export const editBook = createAsyncThunk(
   },
 );
 
+export const deleteBook = createAsyncThunk(
+  "book/deleteBook",
+  async ({ id, owner }: { id: string; owner: string }) => {
+    const response = await api.deleteBook({ id, owner });
+
+    return { id, ...response.data };
+  },
+);
+
 export const { reducer, actions } = createSlice({
   name: "book",
   initialState,
@@ -85,6 +94,18 @@ export const { reducer, actions } = createSlice({
         });
       })
       .addCase(editBook.rejected, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(deleteBook.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(deleteBook.fulfilled, (state, action) => {
+        state.loading = false;
+        state.books = state.books.filter(
+          (book) => book._id !== action.payload.id,
+        );
+      })
+      .addCase(deleteBook.rejected, (state, action) => {
         state.loading = false;
       });
   },

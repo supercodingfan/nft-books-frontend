@@ -3,7 +3,7 @@ import { Grid, GridItem, useDisclosure } from "@chakra-ui/react";
 import { useEthers } from "@usedapp/core";
 
 import { useAppSelector, useAppDispatch } from "../redux/hook";
-import { selectBooks, getBookList } from "../redux/modules/book";
+import { selectBooks, getBookList, deleteBook } from "../redux/modules/book";
 import BookCard from "../components/BookCard";
 import BookCreationCard from "../components/BookCreationCard";
 import BookCreationModal from "../components/BookCreationModal";
@@ -17,6 +17,10 @@ const BookList = () => {
   useEffect(() => {
     dispatch(getBookList());
   }, []);
+
+  const onDeleteBook = (id: string) => {
+    if (account) dispatch(deleteBook({ id, owner: account }));
+  };
 
   return (
     <Grid
@@ -42,7 +46,7 @@ const BookList = () => {
       {books.map((book, index) => {
         return (
           <GridItem w="100%" key={`books${index}`}>
-            <BookCard book={book} />
+            <BookCard book={book} onDelete={() => onDeleteBook(book._id)} />
           </GridItem>
         );
       })}

@@ -39,6 +39,12 @@ const api = {
         "content-type": "multipart/form-data",
       },
     }),
+  deleteBook: ({ id, owner }: { id: string; owner: string }) =>
+    axiosInstance({
+      method: "delete",
+      url: `/books/${id}`,
+      data: { owner },
+    }),
 };
 
 export default api;
